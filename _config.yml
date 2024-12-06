@@ -14,3 +14,4 @@ just_the_docs:
     - Home: docs/index.md
     - Getting Started: docs/getting-started.md
     - Advanced Features: docs/advanced-features.md
+    - Conditions: docs/conditions.md
