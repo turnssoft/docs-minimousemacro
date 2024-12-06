@@ -11,6 +11,6 @@ just_the_docs:
   nav_order: 1
   # Optionally control the hierarchy and pages that appear
   nav:
-    - Home: index.md
-    - Getting Started: getting-started.md
-    - Advanced Features: advanced-features.md
+    - Home: docs/index.md
+    - Getting Started: docs/getting-started.md
+    - Advanced Features: docs/advanced-features.md
