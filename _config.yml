@@ -1,3 +1,10 @@
+title: "Mini Mouse Macro"
+description: "All the docs for Mini Mouse Macro"
+# Use Just the Docs theme
+remote_theme: just-the-docs/just-the-docs
+# Note: You do not need a `theme:` line if you use `remote_theme:`
+# Configure your sidebar navigation
+
 # Just the Docs configuration
 just_the_docs:
   nav_order: 1
