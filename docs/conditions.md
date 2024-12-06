@@ -4,153 +4,98 @@ title: Conditions
 nav_order: 4
 ---
 
-# Conditions in Mini Mouse Macro
+# Control Flow Statements in Mini Mouse Macro
 
-Conditions in Mini Mouse Macro allow you to make decisions and execute actions based on certain criteria. They work by comparing a variable or a system state against a specified value or condition.
+Control flow statements in Mini Mouse Macro allow you to add decision-making capabilities to your macros, enabling them to evaluate the environment and control the flow of execution.
 
----
+## IF
 
-## Basic Syntax
-
-The syntax for a condition in Mini Mouse Macro is as follows:
-
-<Condition>:<Comparison>:<Value>
-
-markdown
-Copy code
-
-- <Condition>: Specifies what to check (e.g., a variable or system property).
-- <Comparison>: Defines the comparison operator (e.g., ==, >, <, !=).
-- <Value>: The value to compare against.
-
----
-
-## Available Conditions
-
-### Variable Comparison
-You can compare the value of a variable using conditions.
-
-VARIABLE:<VariableName>:<Comparison>:<Value>
-
-makefile
-Copy code
+An **IF** condition checks whether a statement evaluates to **TRUE**.
 
 **Example:**
-VARIABLE:counter:==:10
 
-yaml
-Copy code
-This condition checks if the variable counter equals 10.
+```
+1 | IF | FILE | C:\MMM\Skip.mmmacro | EXIST | CONTINUE
+```
 
----
+This reads: IF the file `C:\MMM\skip.mmmacro` exists, then CONTINUE the macro.
 
-### Window State
-Conditions can be used to check the state of a window.
+## IF NOT
 
-WINDOW:<WindowTitle>:<Comparison>:<Value>
-
-makefile
-Copy code
+An **IF NOT** condition checks whether a statement evaluates to **FALSE**.
 
 **Example:**
-WINDOW:Notepad:EXISTS
 
-yaml
-Copy code
-This condition checks if a window titled "Notepad" exists.
+```
+1 | IF NOT | FILE SIZE | C:\MMM\Skip.mmmacro | IS | 2929 | STOP
+```
 
----
+This reads: IF the file size of `C:\MMM\skip.mmmacro` is not 2929 bytes, then STOP the macro.
 
-### File State
-You can check if a file exists or its properties.
+## IF THEN ELSE
 
-FILE:<FilePath>:<Comparison>:<Value>
+An **IF THEN ELSE** statement runs different sets of actions depending on whether an expression is **TRUE** or **FALSE**.
 
-makefile
-Copy code
+**Basic IF THEN Block:**
 
-**Example:**
-FILE:C:\example.txt:EXISTS
+```
+1 | IF | FILE | C:\Macro\File\output.txt | EXIST | THEN
+2 | RUN ACTION | DEFINE INTEGER VARIABLE | COUNT::+1
+3 | RUN ACTION | DEFINE STRING VARIABLE | %strFileOutput%::%count%: %date%-%TIME%
+4 | RUN ACTION | OUTPUT TO FILE | C:\Macro\File\output.txt::APPEND_NEWLINE::%strFileOutput%
+5 | IF | END IF
+```
 
-yaml
-Copy code
-This condition checks if the file C:\example.txt exists.
+**IF THEN ELSE Block:**
 
----
+```
+1 | IF | BOOLEAN VARIABLE | %BOOLEAN% | IS TRUE | THEN
+2 | RUN ACTION | MESSAGE PROMPT | TRUE
+3 | IF | ELSE
+4 | RUN ACTION | MESSAGE PROMPT | FALSE
+5 | IF | END IF
+```
 
-### Pixel Color
-Check the color of a specific screen pixel.
+Here is another example of a formed **IF THEN ELSE** block involving image detection:
 
-PIXEL:<X>:<Y>:<Comparison>:<ColorValue>
+```
+1 | IF | DETECT IMAGE | image path C:\File\pics\capture.bmp::match quick::move mouse yes | IMAGE FOUND | THEN
+2 | RUN ACTION | MOUSE CLICK | Left click at %mouse_x% %mouse_y% 10 times with 10 ms delay and lock the mouse
+3 | RUN ACTION | DEFINE BOOLEAN VARIABLE | %boolImageFound%::TRUE
+4 | IF | ELSE
+5 | RUN ACTION | DEFINE PIXEL RANGE VARIABLE | %PIXEL_RANGE%::At location [X:89 Y:124 W:100 H:100]::Save image to C:\File\pics\capture.bmp
+6 | RUN ACTION | DEFINE BOOLEAN VARIABLE | %boolImageFound%::FALSE
+7 | RUN ACTION | WAIT SECONDS | 5
+8 | IF | END IF
+9 | IF | BOOLEAN VARIABLE | %boolImageFound% | IS FALSE | GOTO MACRO LINE | 1
+```
 
-makefile
-Copy code
+## Nested IF Blocks
 
-**Example:**
-PIXEL:100:200:==:#FFFFFF
+**IF** blocks can be nested within each other. Here is an example:
 
-yaml
-Copy code
-This condition checks if the pixel at (100, 200) is white (#FFFFFF).
+```
+1 | IF | FOLDER | C:\Macro\File\pics\ | EXIST | THEN
+2 | IF | DETECT IMAGE | image path C:\File\pics\capture.bmp::match quick::move mouse yes | IMAGE FOUND | THEN
+3 | RUN ACTION | MOUSE CLICK | Left click at %mouse_x% %mouse_y% 10 times with 10 ms delay and lock the mouse
+4 | RUN ACTION | DEFINE BOOLEAN VARIABLE | %boolImageFound%::TRUE
+5 | IF | ELSE
+6 | RUN ACTION | DEFINE PIXEL RANGE VARIABLE | %PIXEL_RANGE%::At location [X:89 Y:124 W:100 H:100]::Save image to C:\File\pics\capture.bmp
+7 | RUN ACTION | DEFINE BOOLEAN VARIABLE | %boolImageFound%::FALSE
+8 | RUN ACTION | WAIT SECONDS | 5
+9 | IF | END IF
+10 | IF | ELSE
+11 | RUN ACTION | FILE CREATE | C:\File\pics\capture.bmp::B::1
+12 | RUN ACTION | DEFINE PIXEL RANGE VARIABLE | %PIXEL_RANGE%::At location [X:89 Y:124 W:100 H:100]::Save image to C:\File\pics\capture.bmp
+13 | RUN ACTION | DEFINE BOOLEAN VARIABLE | %boolImageFound%::FALSE
+14 | IF | END IF
+15 | IF | BOOLEAN VARIABLE | %boolImageFound% | IS FALSE | GOTO MACRO LINE | 1
+```
 
----
+## Notes on IF THEN Blocks
 
-### Delay and Wait Conditions
-Conditions can be used with delays or waits to pause macro execution until the condition is met.
+- All **IF THEN** blocks must have a closing **END IF**.
+- Once within an **IF THEN** block, it is not possible to escape out using **GOTO** prior to closing the block.
+- Classic **IF ELSEIF** statements are not yet supported.
+- Statements within **IF THEN** blocks do not need to be indented and will work as expected without indentation.
 
-**Example:**
-WAIT:VARIABLE:counter:==:20
-
-yaml
-Copy code
-This waits until the variable counter equals 20.
-
----
-
-## Comparison Operators
-
-| Operator  | Description              |
-|-----------|--------------------------|
-| ==      | Equals                   |
-| !=      | Not equals               |
-| >       | Greater than             |
-| <       | Less than                |
-| >=      | Greater than or equal to |
-| <=      | Less than or equal to    |
-
----
-
-## Examples
-
-### Example 1: Variable-Based Condition
-VARIABLE:count:>=:5
-
-yaml
-Copy code
-Checks if the variable count is greater than or equal to 5.
-
----
-
-### Example 2: Conditional Execution
-IF VARIABLE:counter:==:10 MESSAGE:Counter reached 10! ENDIF
-
-yaml
-Copy code
-Displays a message box if the variable counter equals 10.
-
----
-
-### Example 3: Pixel Color Check with Wait
-WAIT PIXEL:300:400:==:#FF0000 MESSAGE:Red pixel detected!
-
-yaml
-Copy code
-Waits until the pixel at (300, 400) is red (#FF0000), then shows a message.
-
----
-
-## Tips and Tricks
-
-1. **Combining Conditions**: Use nested conditions for complex logic.
-2. **Debugging**: Add log messages to troubleshoot your conditions.
-3. **Performance**: Be cautious when checking pixel colors or file states frequently, as they can impact macro speed.
