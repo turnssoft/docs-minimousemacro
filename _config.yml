@@ -1,3 +1,16 @@
-theme: jekyll-rtd-theme
-title: Mini Mouse Macro - Docs
-description: Mini Mouse Macro documentation
+title: "Mini Mouse Macro"
+description: "All the docs for Mini Mouse Macro"
+
+# Use Just the Docs theme
+remote_theme: just-the-docs/just-the-docs
+# Note: You do not need a `theme:` line if you use `remote_theme:`
+
+# Configure your sidebar navigation
+just_the_docs:
+  # Specify the order and grouping of your pages in the navigation sidebar
+  nav_order: 1
+  # Optionally control the hierarchy and pages that appear
+  nav:
+    - Home: index.md
+    - Getting Started: getting-started.md
+    - Advanced Features: advanced-features.md
