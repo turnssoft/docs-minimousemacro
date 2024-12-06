@@ -1,27 +1,23 @@
-title: "Mini Mouse Macro"
-description: "All the docs for Mini Mouse Macro"
-
-# Use Just the Docs theme
-remote_theme: just-the-docs/just-the-docs
-# Note: You do not need a `theme:` line if you use `remote_theme:`
-
-# Configure your sidebar navigation
+# Just the Docs configuration
 just_the_docs:
   nav_order: 1
   nav:
-    - Home: docs/index.md
-    - Getting Started: docs/getting-started.md
-    - Advanced Features: docs/advanced-features.md
-    - Conditions:
-        - url: docs/conditions.md
-          children:
-            - title: "IF"
-              url: docs/conditions.md#if
-            - title: "IF NOT"
-              url: docs/conditions.md#if-not
-            - title: "IF THEN ELSE"
-              url: docs/conditions.md#if-then-else
-            - title: "Nested IF Blocks"
-              url: docs/conditions.md#nested-if-blocks
-            - title: "Notes on IF THEN Blocks"
-              url: docs/conditions.md#notes-on-if-then-blocks
+    - title: "Home"
+      url: "/docs/index.md"
+    - title: "Getting Started"
+      url: "/docs/getting-started.md"
+    - title: "Advanced Features"
+      url: "/docs/advanced-features.md"
+    - title: "Conditions"
+      url: "/docs/conditions.md"
+      children:
+        - title: "IF"
+          url: "/docs/conditions.md#if"
+        - title: "IF NOT"
+          url: "/docs/conditions.md#if-not"
+        - title: "IF THEN ELSE"
+          url: "/docs/conditions.md#if-then-else"
+        - title: "Nested IF Blocks"
+          url: "/docs/conditions.md#nested-if-blocks"
+        - title: "Notes on IF THEN Blocks"
+          url: "/docs/conditions.md#notes-on-if-then-blocks"
